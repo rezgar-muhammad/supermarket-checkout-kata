@@ -1,0 +1,41 @@
+<div class="checkout-page">
+  <header class="page-header">
+    <h1>🛒 Supermarket Checkout</h1>
+    <p>Add items to your cart and enjoy our weekly offers!</p>
+  </header>
+
+  @if (error(); as errorMsg) {
+    <div class="alert alert-error" role="alert">
+      <span>{{ errorMsg }}</span>
+      <button (click)="dismissError()" type="button" aria-label="Dismiss error">✕</button>
+    </div>
+  }
+
+  @if (checkoutResult(); as result) {
+    <div class="alert alert-success" role="alert">
+      <div class="success-content">
+        <h3>✓ Checkout Complete!</h3>
+        <p>Total: <strong>€{{ result.totalPrice.toFixed(2) }}</strong></p>
+      </div>
+      <button (click)="dismissResult()" type="button" aria-label="Dismiss success">✕</button>
+    </div>
+  }
+
+  <div class="main-content">
+    <section class="products-section">
+      <app-product-list />
+    </section>
+
+    <aside class="cart-section">
+      <app-cart (checkoutRequested)="onCheckout()" />
+
+      @if (isLoading()) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <p>Processing checkout...</p>
+        </div>
+      }
+    </aside>
+  </div>
+</div>
+

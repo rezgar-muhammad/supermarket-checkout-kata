@@ -1,0 +1,28 @@
+<div class="product-list">
+  <h2>Available Products</h2>
+
+  <div class="products-grid">
+    @for (product of products(); track product.id) {
+      <div class="product-card">
+        <div class="product-info">
+          <h3>{{ product.name }}</h3>
+          <p class="price">€{{ product.price.toFixed(2) }}</p>
+
+          @if (getOfferForProduct(product.id); as offer) {
+            <span class="offer-badge">{{ offer }}</span>
+          }
+        </div>
+
+        <button
+          class="add-btn"
+          (click)="addToCart(product)"
+          type="button">
+          Add to Cart
+        </button>
+      </div>
+    } @empty {
+      <p class="no-products">No products available</p>
+    }
+  </div>
+</div>
+
