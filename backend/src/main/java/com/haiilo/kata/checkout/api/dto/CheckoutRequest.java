@@ -1,7 +1,10 @@
 package com.haiilo.kata.checkout.api.dto;
 
-public class CheckoutRequest {
-    private  String productId;
-    private int quantity;
+import lombok.Data;
 
+import java.util.Map;
+
+@Data
+public class CheckoutRequest {
+    private Map<String, Integer> items; // productId -> quantity
 }
