@@ -5,11 +5,13 @@ import com.haiilo.kata.checkout.api.dto.CheckoutResponse;
 import com.haiilo.kata.checkout.model.Cart;
 import com.haiilo.kata.checkout.service.CheckoutService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/checkout")
@@ -19,10 +21,14 @@ public class CheckoutController {
 
     @PostMapping
     public ResponseEntity<CheckoutResponse> calculateTotal(@RequestBody CheckoutRequest checkoutRequest) {
+        log.info("Received checkout request with {} items", checkoutRequest.getItems().size());
+
         Cart cart = new Cart();
         cart.setItems(checkoutRequest.getItems());
 
         BigDecimal total = checkoutService.calculateTotal(cart);
+        log.info("Checkout completed, total: {}", total);
+
         return ResponseEntity.ok(new CheckoutResponse(total));
     }
 }

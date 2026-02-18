@@ -3,11 +3,13 @@ package com.haiilo.kata.checkout.api;
 import com.haiilo.kata.checkout.model.Product;
 import com.haiilo.kata.checkout.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
@@ -18,12 +20,17 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        log.info("GET /api/products - Fetching all products");
+        List<Product> products = productService.getAllProducts();
+        log.debug("Returning {} products", products.size());
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
-        return ResponseEntity.ok(productService.getProductById(id));
+        log.info("GET /api/products/{} - Fetching product by id", id);
+        Product product = productService.getProductById(id);
+        return ResponseEntity.ok(product);
     }
 }
 
