@@ -10,8 +10,10 @@ export interface CartItem {
 }
 
 export interface Offer {
+  id: string;
   productId: string;
   requiredQuantity: number;
-  discountedPrice: number;
+  offerPrice: number;
+  active: boolean;
 }
 

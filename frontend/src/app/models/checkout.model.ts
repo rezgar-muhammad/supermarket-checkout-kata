@@ -1,17 +1,12 @@
 export interface CheckoutRequest {
-  items: CartItemRequest[];
-}
-
-export interface CartItemRequest {
-  productId: string;
-  quantity: number;
+  items: Record<string, number>; // { productId: quantity }
 }
 
 export interface CheckoutResponse {
   totalPrice: number;
-  appliedOffers?: AppliedOffer[];
 }
 
+// Keep for potential future use
 export interface AppliedOffer {
   productName: string;
   savings: number;

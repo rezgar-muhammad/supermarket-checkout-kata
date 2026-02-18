@@ -22,9 +22,9 @@ export class CheckoutPageComponent {
   readonly error = signal<string | null>(null);
 
   onCheckout(): void {
-    const items = this.cartService.getCartItemRequest();
+    const request = this.cartService.getCheckoutRequest();
 
-    if (items.length === 0) {
+    if (Object.keys(request.items).length === 0) {
       this.error.set('Your cart is empty');
       return;
     }
@@ -32,7 +32,7 @@ export class CheckoutPageComponent {
     this.isLoading.set(true);
     this.error.set(null);
 
-    this.checkoutService.checkout({ items }).subscribe({
+    this.checkoutService.checkout(request).subscribe({
       next: (response) => {
         this.checkoutResult.set(response);
         this.cartService.clearCart();

@@ -33,7 +33,7 @@ export class ProductListComponent implements OnInit {
   getOfferForProduct(productId: string): string | null {
     const offer = this.offers().find(o => o.productId === productId);
     if (offer) {
-      return `Buy ${offer.requiredQuantity} for €${offer.discountedPrice.toFixed(2)}`;
+      return `Buy ${offer.requiredQuantity} for €${offer.offerPrice.toFixed(2)}`;
     }
     return null;
   }

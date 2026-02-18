@@ -1,5 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { CartItem, Product, Offer } from '../models/product.model';
+import { CheckoutRequest } from '../models/checkout.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class CartService {
       if (offer) {
         const offerSets = Math.floor(item.quantity / offer.requiredQuantity);
         const remainder = item.quantity % offer.requiredQuantity;
-        total += (offerSets * offer.discountedPrice) + (remainder * item.product.price);
+        total += (offerSets * offer.offerPrice) + (remainder * item.product.price);
       } else {
         total += item.product.price * item.quantity;
       }
@@ -85,11 +86,12 @@ export class CartService {
     this.cartItems.set([]);
   }
 
-  getCartItemRequest() {
-    return this.cartItems().map(item => ({
-      productId: item.product.id,
-      quantity: item.quantity
-    }));
+  getCheckoutRequest(): CheckoutRequest {
+    const items: Record<string, number> = {};
+    for (const item of this.cartItems()) {
+      items[item.product.id] = item.quantity;
+    }
+    return { items };
   }
 }
 
