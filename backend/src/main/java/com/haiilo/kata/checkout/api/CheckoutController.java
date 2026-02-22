@@ -4,6 +4,7 @@ import com.haiilo.kata.checkout.api.dto.CheckoutRequest;
 import com.haiilo.kata.checkout.api.dto.CheckoutResponse;
 import com.haiilo.kata.checkout.model.Cart;
 import com.haiilo.kata.checkout.service.CheckoutService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,12 @@ import java.math.BigDecimal;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/checkout")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${app.cors.allowed-origins:http://localhost:4200}")
 public class CheckoutController {
     private final CheckoutService checkoutService;
 
     @PostMapping
-    public ResponseEntity<CheckoutResponse> calculateTotal(@RequestBody CheckoutRequest checkoutRequest) {
+    public ResponseEntity<CheckoutResponse> calculateTotal(@Valid @RequestBody CheckoutRequest checkoutRequest) {
         log.info("Received checkout request with {} items", checkoutRequest.getItems().size());
 
         Cart cart = new Cart();
