@@ -8,10 +8,10 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class CheckoutService {
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/checkout`;
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly apiUrl: string = `${environment.apiUrl}/checkout`;
 
-  checkout(request: CheckoutRequest): Observable<CheckoutResponse> {
+  public checkout(request: CheckoutRequest): Observable<CheckoutResponse> {
     return this.http.post<CheckoutResponse>(this.apiUrl, request);
   }
 }

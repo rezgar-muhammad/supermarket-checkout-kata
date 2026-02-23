@@ -8,14 +8,14 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = environment.apiUrl;
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly apiUrl: string = environment.apiUrl;
 
-  getProducts(): Observable<Product[]> {
+  public getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/products`);
   }
 
-  getOffers(): Observable<Offer[]> {
+  public getOffers(): Observable<Offer[]> {
     return this.http.get<Offer[]>(`${this.apiUrl}/offers`);
   }
 }

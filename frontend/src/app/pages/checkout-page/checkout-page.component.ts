@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductListComponent } from '../../components/product-list/product-list.component';
 import { CartComponent } from '../../components/cart/cart.component';
 import { CartService } from '../../services/cart.service';
 import { CheckoutService } from '../../services/checkout.service';
-import { CheckoutResponse } from '../../models/checkout.model';
+import { CheckoutRequest, CheckoutResponse } from '../../models/checkout.model';
 
 @Component({
   selector: 'app-checkout-page',
@@ -14,15 +14,15 @@ import { CheckoutResponse } from '../../models/checkout.model';
   styleUrl: './checkout-page.component.scss'
 })
 export class CheckoutPageComponent {
-  private readonly cartService = inject(CartService);
-  private readonly checkoutService = inject(CheckoutService);
+  private readonly cartService: CartService = inject(CartService);
+  private readonly checkoutService: CheckoutService = inject(CheckoutService);
 
-  readonly isLoading = signal(false);
-  readonly checkoutResult = signal<CheckoutResponse | null>(null);
-  readonly error = signal<string | null>(null);
+  public readonly isLoading: WritableSignal<boolean> = signal<boolean>(false);
+  public readonly checkoutResult: WritableSignal<CheckoutResponse | null> = signal<CheckoutResponse | null>(null);
+  public readonly error: WritableSignal<string | null> = signal<string | null>(null);
 
-  onCheckout(): void {
-    const request = this.cartService.getCheckoutRequest();
+  public onCheckout(): void {
+    const request: CheckoutRequest = this.cartService.getCheckoutRequest();
 
     if (Object.keys(request.items).length === 0) {
       this.error.set('Your cart is empty');
@@ -33,12 +33,12 @@ export class CheckoutPageComponent {
     this.error.set(null);
 
     this.checkoutService.checkout(request).subscribe({
-      next: (response) => {
+      next: (response: CheckoutResponse) => {
         this.checkoutResult.set(response);
         this.cartService.clearCart();
         this.isLoading.set(false);
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Checkout failed:', err);
         this.error.set('Checkout failed. Please try again.');
         this.isLoading.set(false);
@@ -46,11 +46,11 @@ export class CheckoutPageComponent {
     });
   }
 
-  dismissResult(): void {
+  public dismissResult(): void {
     this.checkoutResult.set(null);
   }
 
-  dismissError(): void {
+  public dismissError(): void {
     this.error.set(null);
   }
 }

@@ -1,10 +1,19 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
+import { HttpInterceptorFn, HttpErrorResponse, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
 
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+export interface HttpErrorDetails {
+  status: number;
+  message: string;
+  originalError: HttpErrorResponse;
+}
+
+export const errorInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
   return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
-      let errorMessage = 'An unexpected error occurred';
+    catchError((error: HttpErrorResponse): Observable<never> => {
+      let errorMessage: string = 'An unexpected error occurred';
 
       if (error.error instanceof ErrorEvent) {
         // Client-side error
@@ -35,7 +44,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         url: error.url
       });
 
-      return throwError(() => ({
+      return throwError((): HttpErrorDetails => ({
         status: error.status,
         message: errorMessage,
         originalError: error
